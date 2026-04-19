@@ -147,16 +147,17 @@ pub fn resolve_model_alias(model: &str) -> String {
                     "haiku" => "claude-haiku-4-5-20251213",
                     _ => trimmed,
                 },
-                ProviderKind::Xai => match *alias {
-                    "grok" | "grok-3" => "grok-3",
-                    "grok-mini" | "grok-3-mini" => "grok-3-mini",
-                    "grok-2" => "grok-2",
-                    _ => trimmed,
-                },
+                //                 ProviderKind::Xai => match *alias {
+//                     "grok" | "grok-3" => "grok-3",
+//                     "grok-mini" | "grok-3-mini" => "grok-3-mini",
+//                     "grok-2" => "grok-2",
+//                     _ => trimmed,
+//                 },
                 ProviderKind::OpenAi => match *alias {
                     "kimi" => "kimi-k2.5",
                     _ => trimmed,
                 },
+                ProviderKind::Xai => trimmed,
             })
         })
         .map_or_else(|| trimmed.to_string(), ToOwned::to_owned)
@@ -173,14 +174,14 @@ pub fn metadata_for_model(model: &str) -> Option<ProviderMetadata> {
             default_base_url: anthropic::DEFAULT_BASE_URL,
         });
     }
-    if canonical.starts_with("grok") {
-        return Some(ProviderMetadata {
-            provider: ProviderKind::Xai,
-            auth_env: "XAI_API_KEY",
-            base_url_env: "XAI_BASE_URL",
-            default_base_url: openai_compat::DEFAULT_XAI_BASE_URL,
-        });
-    }
+    //     if canonical.starts_with("grok") {
+//         return Some(ProviderMetadata {
+//             provider: ProviderKind::Xai,
+//             auth_env: "XAI_API_KEY",
+//             base_url_env: "XAI_BASE_URL",
+//             default_base_url: openai_compat::DEFAULT_XAI_BASE_URL,
+//         });
+//     }
     // Explicit provider-namespaced models (e.g. "openai/gpt-4.1-mini") must
     // route to the correct provider regardless of which auth env vars are set.
     // Without this, detect_provider_kind falls through to the auth-sniffer
